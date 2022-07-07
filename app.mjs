@@ -6,20 +6,21 @@ import { HttpJsonRpcConnector, LotusWalletProvider, LotusClient } from 'filecoin
 
   const client = new LotusClient(connector);
   const version = await client.common.version();
-  console.log(version);
+  console.log("Lotus version number is " + version.Version + ";\n");
 
   const walletLotusHttp = new LotusWalletProvider(client);
-  let address1 = await walletProvider.newAddress();
-  let address2 = await walletProvider.newAddress();
-  let address3 = await walletProvider.newAddress();
+  let address1 = await walletLotusHttp.newAddress();
+  let address2 = await walletLotusHttp.newAddress();
+  let address3 = await walletLotusHttp.newAddress();
+  console.log("New wallet addresses:")
   console.log("address1: " + address1 + ";");
   console.log("address2: " + address2 + ";");
-  console.log("address3: " + address3 + ";");
+  console.log("address3: " + address3 + ";\n");
 
   const defaultAddress = await walletLotusHttp.getDefaultAddress();
+  console.log("defaultAdress is: " + defaultAddress + ";\n");
 
-
-  walletProvider.msigCreate(2, [address1, address2, address3], 0, 0, "1000", defaultAddress);
-
+  const msigWalletAddress = await walletLotusHttp.msigCreate(2, [address1, address2, address3], 0, 0, "1000", defaultAddress);
+  console.log("Multisig Wallet Address: " + msigWalletAddress['/'] + ";");
 
 })().then().catch();
